@@ -26,9 +26,34 @@ resource "aws_instance" "bastion" {
   key_name = aws_key_pair.key.key_name
   vpc_security_group_ids = [var.bastion_sg_id]
   subnet_id = var.public_subnet_id
-  associate_public_ip_address = true
   user_data = file("${path.module}/userdata.sh")
+
   tags = {
     Name = "${var.project_name}-bastion"
   }
+
+  depends_on = [ aws_instance.private ]
 }
+
+##################################################################################
+
+# create 2 private ec2 instances in each private subnet
+
+resource "aws_instance" "private" {
+  count = 2
+  ami = data.aws_ami.focal.id
+  instance_type = var.instance_type
+  key_name = aws_key_pair.key.key_name
+  vpc_security_group_ids = [var.private_sg_id]
+  subnet_id = element(var.private_subnet_ids, count.index)
+
+  provisioner "local-exec" {
+    command = "echo ${aws_instance.private.*.private_ip[count.index]} > ${path.module}/../../../ansible/inventory.ini"
+  }
+
+  tags = {
+    Name = "${var.project_name}-private-${count.index}"
+  }
+}
+
+##################################################################################
