@@ -32,7 +32,7 @@ resource "aws_instance" "bastion" {
     Name = "${var.project_name}-bastion"
   }
 
-  depends_on = [ aws_instance.private ]
+  depends_on = [aws_instance.private]
 }
 
 ##################################################################################
@@ -47,12 +47,20 @@ resource "aws_instance" "private" {
   vpc_security_group_ids = [var.private_sg_id]
   subnet_id = element(var.private_subnet_ids, count.index)
 
-  provisioner "local-exec" {
-    command = "echo ${aws_instance.private.*.private_ip[count.index]} > ${path.module}/../../../ansible/inventory.ini"
-  }
-
   tags = {
     Name = "${var.project_name}-private-${count.index}"
+  }
+}
+
+##################################################################################
+
+# create a local-exec provisioner to generate the inventory file
+
+resource "null_resource" "generate_inventory" {
+  depends_on = [aws_instance.private]
+
+  provisioner "local-exec" {
+    command = "echo ${join(",", aws_instance.private.*.private_ip)} > ${path.module}/../../../ansible/inventory.ini"
   }
 }
 
