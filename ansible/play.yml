@@ -4,8 +4,6 @@
   roles:
     - role: update
     - role: install
+    - role: getinfo
     - role: template
-      vars:
-        ansible_host: "{{ hostvars[inventory_hostname].inventory_hostname }}"
-        ansible_default_ipv4.address: "{{ hostvars[inventory_hostname].ansible_default_ipv4.address }}"
     - role: restart

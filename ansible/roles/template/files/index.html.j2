@@ -26,6 +26,6 @@
 <body>
     <h1>Welcome to My Nginx Server!</h1>
     <p>Hostname: {{ ansible_hostname }}</p>
-    <p>IP Address: {{ ansible_default_ipv4.address }}</p>
+    <p>Timezone: {{ timezone.stdout }}</p>
 </body>
 </html>

@@ -1,0 +1,15 @@
+- name: Get fact
+  setup:
+
+- name: Display hostname
+  debug:
+    var: ansible_hostname
+
+- name: Display timezone
+  command: timedatectl show --property=Timezone --value
+  register: timezone
+  changed_when: False
+
+- name: Display timezone
+  debug:
+    var: timezone.stdout
