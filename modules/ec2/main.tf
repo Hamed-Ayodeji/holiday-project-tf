@@ -28,11 +28,35 @@ resource "aws_instance" "bastion" {
   subnet_id = var.public_subnet_id
   user_data = file("${path.module}/userdata.sh")
 
+  provisioner "file" {
+    source = "${path.module}/../../holiday/holiday.pem"
+    destination = "/home/ubuntu/holiday.pem"
+
+    connection {
+      type        = "ssh"
+      user        = "ubuntu"
+      private_key = file("${path.module}/../../holiday/holiday.pem")
+      host        = self.public_ip
+    }
+  }
+
+  provisioner "file" {
+    source = "${path.module}/../../ansible/inventory.ini"
+    destination = "/home/ubuntu/inventory.ini"
+
+    connection {
+      type        = "ssh"
+      user        = "ubuntu"
+      private_key = file("${path.module}/../../holiday/holiday.pem")
+      host        = self.public_ip
+    }
+  }
+
   tags = {
     Name = "${var.project_name}-bastion"
   }
 
-  depends_on = [aws_instance.private]
+  depends_on = [aws_instance.private, local_file.private_key, local_file.private_ips]
 }
 
 ##################################################################################
@@ -56,12 +80,15 @@ resource "aws_instance" "private" {
 
 # create a local-exec provisioner to generate the inventory file
 
-resource "null_resource" "generate_inventory" {
-  depends_on = [aws_instance.private]
+locals {
+  private_ips = aws_instance.private[*].private_ip
+}
 
-  provisioner "local-exec" {
-    command = "echo ${join(",", aws_instance.private.*.private_ip)} > ${path.module}/../../../ansible/inventory.ini"
-  }
+resource "local_file" "private_ips" {
+  content = join("\n", local.private_ips)
+  filename = "${path.module}/../../ansible/inventory.ini"
+  
+  depends_on = [aws_instance.private]
 }
 
 ##################################################################################
