@@ -1,4 +1,4 @@
 - name: Create a HTML file with Hostname and IP Address
   template:
     src: index.html.j2
-    dest: /var/www/html/index.html
+    dest: /var/www/html/index.nginx-debian.html
