@@ -58,8 +58,8 @@ cd /home/ubuntu/ansible && rm -rf /home/ubuntu/ansible/ansible
 
 # change the permissions of the holiday.pem file
 
-chmod 400 holiday.pem
+cd /home/ubuntu/ansible && chmod 400 holiday.pem
 
 # run the ansible playbook
 
-ansible-playbook play.yml
+cd /home/ubuntu/ansible && ansible-playbook play.yml
