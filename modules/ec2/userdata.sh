@@ -42,23 +42,19 @@ rm -rf modules holiday
 
 # navigate into the ansible directory within the ansible directory
 
-cd ~/ansible/ansible
+cd /home/ubuntu/ansible/ansible
 
 # move all th contents of the ansible directory into the ansible directory within the home directory
 
-mv * ~/ansible
+mv /home/ubuntu/ansible/ansible/* /home/ubuntu/ansible
 
 # navigate into the home directory and move the inventory.ini and holiday.pem files into the ansible directory
 
-cd ~ && mv inventory.ini holiday.pem ~/ansible
-
-# navigate into the ansible directory
-
-cd ~/ansible
+cd /home/ubuntu && mv inventory.ini holiday.pem /home/ubuntu/ansible
 
 # remove the ansible directory within the ansible directory
 
-rm -rf ~/ansible/ansible
+cd /home/ubuntu/ansible && rm -rf /home/ubuntu/ansible/ansible
 
 # change the permissions of the holiday.pem file
 

@@ -5,7 +5,7 @@ resource "aws_lb" "lb" {
   internal = false
   load_balancer_type = "application"
   security_groups = [var.lb_sg_id]
-  subnets = [var.private_subnet_ids[0], var.private_subnet_ids[1]]
+  subnets = [var.public_subnet_ids[0], var.public_subnet_ids[1]]
 
   tags = {
     Name = "${var.project_name}-lb"

@@ -25,7 +25,7 @@ resource "aws_instance" "bastion" {
   instance_type = var.instance_type
   key_name = aws_key_pair.key.key_name
   vpc_security_group_ids = [var.bastion_id]
-  subnet_id = var.public_subnet_id
+  subnet_id = var.public_subnet_ids[0]
   user_data = file("${path.module}/userdata.sh")
 
   provisioner "file" {

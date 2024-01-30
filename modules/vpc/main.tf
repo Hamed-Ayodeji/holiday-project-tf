@@ -12,10 +12,14 @@ resource "aws_vpc" "vpc" {
 
 # create a public subnet
 
-resource "aws_subnet" "public_subnet" {
+resource "aws_subnet" "public_subnets" {
+  for_each = {
+    public_subnet1 = 0
+    public_subnet2 = 1
+  }
   vpc_id     = aws_vpc.vpc.id
-  cidr_block = cidrsubnet(var.cidr_block, 4, 0)
-  availability_zone = data.aws_availability_zones.available.names[0]
+  cidr_block = cidrsubnet(var.cidr_block, 4, each.value)
+  availability_zone = data.aws_availability_zones.available.names[each.value]
   map_public_ip_on_launch = true
 
   tags = {
@@ -29,8 +33,8 @@ resource "aws_subnet" "public_subnet" {
 
 resource "aws_subnet" "private_subnets" {
   for_each = {
-    private_subnet1 = 1
-    private_subnet2 = 2
+    private_subnet1 = 2
+    private_subnet2 = 3
   }
   vpc_id = aws_vpc.vpc.id
   cidr_block = cidrsubnet(var.cidr_block, 4, each.value)
@@ -76,7 +80,11 @@ resource "aws_route_table" "public_route_table" {
 # create a public route table association
 
 resource "aws_route_table_association" "public_route_table_association" {
-  subnet_id = aws_subnet.public_subnet.id
+  for_each = {
+    public_subnet1 = aws_subnet.public_subnets["public_subnet1"].id
+    public_subnet2 = aws_subnet.public_subnets["public_subnet2"].id
+  }
+  subnet_id = each.value
   route_table_id = aws_route_table.public_route_table.id
 }
 
@@ -98,7 +106,7 @@ resource "aws_eip" "nat_eip" {
 
 resource "aws_nat_gateway" "nat_gateway" {
   allocation_id = aws_eip.nat_eip.id
-  subnet_id = aws_subnet.public_subnet.id
+  subnet_id = aws_subnet.public_subnets["public_subnet1"].id
 
   tags = {
     Name = "${var.project_name}-nat-gateway"

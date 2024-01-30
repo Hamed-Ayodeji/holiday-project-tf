@@ -16,7 +16,7 @@ module "ec2" {
   vpc_id = module.vpc.vpc_id
   instance_type = var.instance_type
   bastion_id = module.sg.bastion_id
-  public_subnet_id = module.vpc.public_subnet_id
+  public_subnet_ids = module.vpc.public_subnet_ids
   private_subnet_ids = module.vpc.private_subnet_ids
   private_sg_id = module.sg.private_sg_id
 }
@@ -26,7 +26,7 @@ module "lb" {
   project_name = var.project_name
   lb_sg_id = module.sg.lb_sg_id
   private_subnet_ids = module.vpc.private_subnet_ids
-  public_subnet_id = module.vpc.public_subnet_id
+  public_subnet_ids = module.vpc.public_subnet_ids
   vpc_id = module.vpc.vpc_id
   private_instance_ids = module.ec2.private_instance_ids
 }
