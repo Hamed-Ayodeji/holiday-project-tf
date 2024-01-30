@@ -47,7 +47,7 @@ resource "aws_security_group" "bastion" {
 
 resource "aws_security_group" "private_sg" {
   name = "${var.project_name}-private-sg"
-  description = "allow ssh, and icmp traffic inbound from bastion security group, http traffic inbound from the lobalancer security group, and all outbound traffics"
+  description = "allow ssh, and icmp traffic inbound from bastion security group, http and https traffic inbound from the loadbalancer security group, and all outbound traffics"
   vpc_id = var.vpc_id
 
   ingress {
@@ -67,6 +67,13 @@ resource "aws_security_group" "private_sg" {
   ingress {
     from_port = 80
     to_port = 80
+    protocol = "tcp"
+    security_groups = [aws_security_group.lb_sg.id]
+  }
+
+  ingress {
+    from_port = 443
+    to_port = 443
     protocol = "tcp"
     security_groups = [aws_security_group.lb_sg.id]
   }
