@@ -50,15 +50,15 @@ mv * ~/ansible
 
 # navigate into the home directory and move the inventory.ini and holiday.pem files into the ansible directory
 
-cd ~ && mv inventory.ini holiday.pem ansible
+cd ~ && mv inventory.ini holiday.pem ~/ansible
 
 # navigate into the ansible directory
 
-cd ansible
+cd ~/ansible
 
 # remove the ansible directory within the ansible directory
 
-rm -rf ansible
+rm -rf ~/ansible/ansible
 
 # change the permissions of the holiday.pem file
 
