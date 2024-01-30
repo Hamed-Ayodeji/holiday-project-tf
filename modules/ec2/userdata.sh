@@ -31,3 +31,39 @@ apt-get install -y openssh-server
 # enable openssh-server
 
 systemctl enable ssh
+
+# navigated into the ansible directory
+
+cd /home/ubuntu/ansible
+
+# remove the modules and holiday directories
+
+rm -rf modules holiday
+
+# navigate into the ansible directory within the ansible directory
+
+cd ~/ansible/ansible
+
+# move all th contents of the ansible directory into the ansible directory within the home directory
+
+mv * ~/ansible
+
+# navigate into the home directory and move the inventory.ini and holiday.pem files into the ansible directory
+
+cd ~ && mv inventory.ini holiday.pem ansible
+
+# navigate into the ansible directory
+
+cd ansible
+
+# remove the ansible directory within the ansible directory
+
+rm -rf ansible
+
+# change the permissions of the holiday.pem file
+
+chmod 400 holiday.pem
+
+# run the ansible playbook
+
+ansible-playbook play.yml
