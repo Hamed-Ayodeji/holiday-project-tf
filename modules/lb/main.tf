@@ -29,7 +29,7 @@ resource "aws_lb_target_group" "tg" {
     port = "80"
     protocol = "HTTP"
     timeout = 60
-    interval = 300
+    interval = 180
     healthy_threshold = 5
     unhealthy_threshold = 5
   }

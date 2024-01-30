@@ -4,3 +4,4 @@ variable "project_name" {}
 variable "instance_type" {}
 variable "domain_name" {}
 variable "subdomain_name" {}
+variable "ami_id" {}

@@ -39,3 +39,14 @@ module "r53" {
   lb_zone_id = module.lb.lb_zone_id
   project_name = var.project_name
 }
+
+module "asg" {
+  source = "../modules/asg"
+  project_name = var.project_name
+  private_subnet_ids = module.vpc.private_subnet_ids
+  ami_id = var.ami_id
+  instance_type = var.instance_type
+  private_sg_id = module.sg.private_sg_id
+  key_name = module.ec2.key_name
+  target_group_arn = module.lb.target_group_arn
+}
